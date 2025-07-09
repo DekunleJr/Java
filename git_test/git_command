@@ -2,3 +2,4 @@ git branch <branch_name> to create new branch in your local machine
 git checkout <branch_name> to move to another branch
 git checkout -b <branch_name> to create a new branch and switch to it automatically
 git status to know what branch you are on and compare your remote repo with your local repo
+git push --set-upstream origin <branch-name> to push to the branch
