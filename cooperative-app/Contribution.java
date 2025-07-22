@@ -1,6 +1,6 @@
-import java.io.Serializable;
 
-public class Contribution extends Transaction implements Serializable {
+
+public class Contribution extends Transaction {
     private static final long serialVersionUID = 1L;
     private double amount;
 
