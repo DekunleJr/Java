@@ -1,16 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class LoginDialog extends JDialog {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private boolean authenticated = false;
+    private UserManager userManager;
 
-    public LoginDialog(Frame parent) {
+    public LoginDialog(Frame parent, UserManager userManager) {
         super(parent, "Login", true);
-        setLayout(new GridLayout(3, 2));
+        this.userManager = userManager;
+        setLayout(new GridLayout(4, 2));
 
         add(new JLabel("Username:"));
         usernameField = new JTextField();
@@ -21,21 +21,15 @@ public class LoginDialog extends JDialog {
         add(passwordField);
 
         JButton loginButton = new JButton("Login");
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                authenticate();
-            }
-        });
+        loginButton.addActionListener(e -> authenticate());
         add(loginButton);
 
+        JButton registerButton = new JButton("Register");
+        registerButton.addActionListener(e -> register());
+        add(registerButton);
+
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        cancelButton.addActionListener(e -> dispose());
         add(cancelButton);
 
         pack();
@@ -46,11 +40,30 @@ public class LoginDialog extends JDialog {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        if (username.equals("admin") && password.equals("password")) {
+        if (userManager.authenticate(username, password)) {
             authenticated = true;
             dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Failed", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void register() {
+        JTextField regUsernameField = new JTextField();
+        JPasswordField regPasswordField = new JPasswordField();
+        Object[] message = {
+            "Username:", regUsernameField,
+            "Password:", regPasswordField
+        };
+        int option = JOptionPane.showConfirmDialog(this, message, "Register", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            String username = regUsernameField.getText();
+            String password = new String(regPasswordField.getPassword());
+            if (userManager.addUser(username, password)) {
+                JOptionPane.showMessageDialog(this, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Username already exists.", "Registration Failed", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 

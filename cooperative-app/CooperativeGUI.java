@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class CooperativeGUI extends JFrame {
     private CooperativeApp app;
@@ -151,8 +149,9 @@ public class CooperativeGUI extends JFrame {
     public static void main(String[] args) {
         CooperativeApp app = new CooperativeApp();
         app.loadData();
+        UserManager userManager = new UserManager();
 
-        LoginDialog loginDialog = new LoginDialog(null);
+        LoginDialog loginDialog = new LoginDialog(null, userManager);
         loginDialog.setVisible(true);
 
         if (loginDialog.isAuthenticated()) {
