@@ -10,28 +10,35 @@ public class LoginDialog extends JDialog {
     public LoginDialog(Frame parent, UserManager userManager) {
         super(parent, "Login", true);
         this.userManager = userManager;
-        setLayout(new GridLayout(4, 2));
+        setLayout(new BorderLayout());
 
-        add(new JLabel("Username:"));
+        // Create a panel for the input fields
+        JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 5));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        inputPanel.add(new JLabel("Username:"));
         usernameField = new JTextField();
-        add(usernameField);
-
-        add(new JLabel("Password:"));
+        inputPanel.add(usernameField);
+        inputPanel.add(new JLabel("Password:"));
         passwordField = new JPasswordField();
-        add(passwordField);
+        inputPanel.add(passwordField);
+        add(inputPanel, BorderLayout.CENTER);
 
+        // Create a panel for the buttons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton loginButton = new JButton("Login");
         loginButton.addActionListener(e -> authenticate());
-        add(loginButton);
+        buttonPanel.add(loginButton);
 
         JButton registerButton = new JButton("Register");
         registerButton.addActionListener(e -> register());
-        add(registerButton);
+        buttonPanel.add(registerButton);
 
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(e -> dispose());
-        add(cancelButton);
+        buttonPanel.add(cancelButton);
+        add(buttonPanel, BorderLayout.SOUTH);
 
+        setPreferredSize(new Dimension(400, 170));
         pack();
         setLocationRelativeTo(parent);
     }
